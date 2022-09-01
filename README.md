@@ -10,19 +10,39 @@ This repository deploys an environment for testing [Lightweight M2M](https://oma
 
 ## Instructions
 
-1. Create a directory `.certs`.
-1. In the `.certs` directory, follow the instructions [here](https://github.com/eclipse/leshan/wiki/Credential-files-format#using-openssl-to-create-self-signed-certificat) to generate x509 private keys and self-signed certificates in DER format for both client and server, with the following file names:
-    | File name | Description |
-    | --- | --- |
-    | ccert.der | Client certificate with `CN=leshan-client` |
-    | cprik.der | Client private key |
-    | xcert.der | Server certificate with `CN=leshan-server` |
-    | xprik.der | Server private key |
-1. Run `docker compose build` to build the L2M2M client and server images.
-1. Run `docker compose up` to deploy the following:
-    - a Leshan server
-    - a Leshan client registering via CoAP (`coap://`)
-    - an endpoint provisioner which configures `leshan-client` as a secure x509 endpoint on the Leshan server (required for registration via CoAP over DTLS)
-    - a Leshan client registering via CoAP over DTLS (`coaps://`)
-1. Browse to [Leshan server web UI](http://localhost:8080) and you should see two clients registered.
-    ![web-ui](./docs/img/leshan-web.png)
+Run the following commands to generate x509 private keys and self-signed certificates in DER format for both client and server (based on instructions [here](https://github.com/eclipse/leshan/wiki/Credential-files-format#using-openssl-to-create-self-signed-certificat)) in the `.certs` directory:
+```
+mkdir .certs
+
+# server private key and cert with CN=leshan-server
+openssl ecparam -out .certs/xprik.pem -name prime256v1 -genkey
+openssl pkcs8 -topk8 -inform PEM -outform DER -in .certs/xprik.pem -out .certs/xprik.der -nocrypt
+openssl req -x509 -new -key .certs/xprik.pem -sha256 -days 36500 \
+                    -subj '/CN=leshan-server' \
+                    -outform DER -out .certs/xcert.der
+
+# client private key and cert with CN=leshan-client
+openssl ecparam -out .certs/cprik.pem -name prime256v1 -genkey
+openssl pkcs8 -topk8 -inform PEM -outform DER -in .certs/cprik.pem -out .certs/cprik.der -nocrypt
+openssl req -x509 -new -key .certs/cprik.pem -sha256 -days 36500 \
+                    -subj '/CN=leshan-client' \
+                    -outform DER -out .certs/ccert.der
+```
+
+Build the L2M2M client and server images:
+```
+docker compose build
+```
+
+Deploy the environment which contains the following:
+- a Leshan server
+- a Leshan client registering via CoAP (`coap://`)
+- an endpoint provisioner which configures `leshan-client` as a secure x509 endpoint on the Leshan server (required for registration via CoAP over DTLS)
+- a Leshan client registering via CoAP over DTLS (`coaps://`)
+
+```
+docker compose up
+```
+
+Lastly, browse to [Leshan server web UI](http://localhost:8080) and you should see two clients registered.
+![web-ui](./docs/img/leshan-web.png)
