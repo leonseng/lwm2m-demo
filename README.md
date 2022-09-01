@@ -16,8 +16,8 @@ This repository deploys an environment for testing [Lightweight M2M](https://oma
     | --- | --- |
     | ccert.der | Client certificate with `CN=leshan-client` |
     | cprik.der | Client private key |
-    | xcert.der | Server certificate |
-    | xprik.der | Server private key with `CN=leshan-server` |
+    | xcert.der | Server certificate with `CN=leshan-server` |
+    | xprik.der | Server private key |
 1. Run `docker compose build` to build the L2M2M client and server images.
 1. Run `docker compose up` to deploy the following:
     - a Leshan server
