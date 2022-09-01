@@ -1,0 +1,48 @@
+version: "3.9"
+services:
+  leshan-server:
+    build:
+      dockerfile: leshan-server.Dockerfile
+    ports:
+      - "8080:8080"
+    volumes:
+      - "./.certs/xcert.der:/opt/app/certs/xcert.der:ro"
+      - "./.certs/xprik.der:/opt/app/certs/xprik.der:ro"
+    command:
+      - "--x509-certificate-chain=/opt/app/certs/xcert.der"
+      - "--x509-private-key=/opt/app/certs/xprik.der"
+  leshan-client-insecure:
+    image: leonseng/leshan-client
+    build:
+      dockerfile: leshan-client.Dockerfile
+    command:
+      - "--server-url=coap://leshan-server:5683"
+      - "--endpoint-name=leshan-client-insecure"
+    depends_on:
+      - leshan-server
+  secure-endpoint-provisioner:
+    image: curlimages/curl
+    volumes:
+      - "./provision-secure-endpoint.sh:/provision-secure-endpoint.sh:ro"
+    entrypoint:
+      - sh
+      - "-c"
+    command:
+      - "/provision-secure-endpoint.sh"
+    depends_on:
+      - leshan-server
+  leshan-client:
+    image: leonseng/leshan-client
+    volumes:
+      - "./.certs/ccert.der:/opt/app/certs/ccert.der:ro"
+      - "./.certs/cprik.der:/opt/app/certs/cprik.der:ro"
+      - "./.certs/xcert.der:/opt/app/certs/xcert.der:ro"
+    command:
+      - "--server-url=coaps://leshan-server:5684"
+      - "--endpoint-name=leshan-client"
+      - "--client-certificate=/opt/app/certs/ccert.der"
+      - "--client-private-key=/opt/app/certs/cprik.der"
+      - "--server-certificate=/opt/app/certs/xcert.der"
+    depends_on:
+      - secure-endpoint-provisioner
+      - leshan-client-insecure
