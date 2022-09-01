@@ -21,8 +21,8 @@ This repository deploys an environment for testing [Lightweight M2M](https://oma
 1. Run `docker compose build` to build the L2M2M client and server images.
 1. Run `docker compose up` to deploy the following:
     - a Leshan server
-    - an endpoint provisioner which configures a secure endpoint on the Leshan server (required for registration via coaps)
     - a Leshan client registering via CoAP (`coap://`)
+    - an endpoint provisioner which configures `leshan-client` as a secure x509 endpoint on the Leshan server (required for registration via CoAP over DTLS)
     - a Leshan client registering via CoAP over DTLS (`coaps://`)
 1. Browse to [Leshan server web UI](http://localhost:8080) and you should see two clients registered.
     ![web-ui](./docs/img/leshan-web.png)
