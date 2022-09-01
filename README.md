@@ -9,8 +9,7 @@ This repository deploys an environment for testing [Lightweight M2M](https://oma
 ## Instructions
 
 1. Create a directory `.certs`.
-1. In the `.certs` director, generate following key pairs following instructions [here](https://github.com/eclipse/leshan/wiki/Credential-files-format):
-
+1. In the `.certs` directory, generate the following key pairs with the instructions [here](https://github.com/eclipse/leshan/wiki/Credential-files-format):
     | File name | Description |
     | --- | --- |
     | ccert.der | Client certificate with `CN=leshan-client` |
