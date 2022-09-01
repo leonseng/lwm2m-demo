@@ -2,7 +2,7 @@
 
 This repository deploys an environment for testing [Lightweight M2M](https://omaspecworks.org/what-is-oma-specworks/iot/lightweight-m2m-lwm2m/) using [Eclipse Leshan](https://github.com/eclipse/leshan).
 
-![deployment](./docs/img/deployment.png)
+![deployment](./docs/img/lwm2m-deployment.png)
 
 ## Prerequisite
 
