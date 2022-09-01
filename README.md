@@ -1,4 +1,4 @@
-# LWM2M Test
+# Lightweight Machine to Machine (LWM2M) Demo
 
 This repository deploys an environment for testing [Lightweight M2M](https://omaspecworks.org/what-is-oma-specworks/iot/lightweight-m2m-lwm2m/) using [Eclipse Leshan](https://github.com/eclipse/leshan).
 
